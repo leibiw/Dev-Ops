@@ -82,6 +82,20 @@ module "eks" {
     "888888888888",
   ]
 
+<<<<<<< HEAD
+  cluster_security_group_additional_rules = {
+    ec2_ingress = {
+      description                 = "Allow EC2 ingress"
+      from_port                   = 443
+      to_port                     = 443
+      type                        = "ingress"
+      protocol                    = "tcp"
+      source_security_group_id    = aws_security_group.eks_management_sg.id
+    }
+  }
+
+=======
+>>>>>>> origin/main
   tags = {
     Environment = "dev"
     Terraform   = "true"
