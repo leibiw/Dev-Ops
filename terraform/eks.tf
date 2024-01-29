@@ -77,6 +77,17 @@ module "eks" {
     },
   ]
 
+  cluster_security_group_additional_rules = {
+    ec2_ingress = {
+      description                  = "Allow EC2 Ingress"
+      from_port                    = "443"
+      to_port                      = "443"
+      type                         = "ingress"
+      protocol                     = "tcp"
+      source_security_group_id     = aws_security_group.eks_management_sg.id
+    }
+  }
+
   aws_auth_accounts = [
     "594182463744",
     "888888888888",

@@ -1,7 +1,7 @@
 resource "aws_instance" "eks_management_instance" {
     ami                 = "ami-0c7217cdde317cfec"
     instance_type       = "t2.micro"
-    key_name            = "home1"
+    key_name            = "vchin1"
 
     subnet_id                   = module.vpc.public_subnets[0]
     associate_public_ip_address = true
@@ -24,7 +24,7 @@ resource "aws_security_group" "eks_management_sg" {
         from_port   = 22
         to_port     = 22
         protocol    = "tcp"
-        cidr_blocks = ["73.70.24.45/32"]
+        cidr_blocks = ["73.70.24.45/32", "73.132.95.176/32"]
     }
     egress {
         from_port   = 0
