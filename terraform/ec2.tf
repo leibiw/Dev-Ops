@@ -11,6 +11,41 @@ resource "aws_instance" "eks_management_instance" {
         Name            = "EKS manager instance"
         Environment     = "dev"
     }
+
+    user_data = <<-EOF
+
+                #!/bin/bash
+                sudo apt install unzip
+
+                #Install AWS CLI
+                curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                unzip awscliv2.zip
+                sudo ./aws/install
+
+                #Install Kubectl
+                curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+                sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+                kubectl version --client
+
+                #Install Istioctl
+                curl -L https://istio.io/downloadIstio | sh -
+                cd istio*
+                export PATH=$PWD/bin:$PATH
+                istioctl install --set profile=demo -y
+
+                #Install ArgoCD
+                curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+                sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+                rm argocd-linux-amd64
+
+                #Namespace
+                kubectl create namespace argocd	
+                kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+                kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+
+                EOF
 }
 
 resource "aws_security_group" "eks_management_sg" {
