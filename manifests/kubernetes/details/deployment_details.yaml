@@ -20,7 +20,7 @@ spec:
       serviceAccountName: bookinfo-details
       containers:
       - name: details
-        image: 632161769103.dkr.ecr.us-east-1.amazonaws.com/sphere-ecr-repo:details-c8c3909
+        image: 632161769103.dkr.ecr.us-east-1.amazonaws.com/sphere-ecr-repo:details-9af5be3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
